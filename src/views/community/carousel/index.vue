@@ -20,18 +20,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="发布时间">
-        <el-date-picker
-          v-model="dateRangeCreateTime"
-          size="small"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -49,7 +38,7 @@
           v-hasPermi="['community:carousel:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -70,23 +59,34 @@
           @click="handleDelete"
           v-hasPermi="['community:carousel:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="carouselList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
+      <!-- <el-table-column type="selection" width="55" align="center" /> -->
+      <!-- <el-table-column label="id" align="center" prop="id" v-if="true"/> -->
       <el-table-column label="标题" align="center" prop="title" />
       <el-table-column label="描述" align="center" prop="description" />
-      <el-table-column label="图片" align="center" prop="image">
+      <el-table-column label="图片" align="center" prop="image" width="300">
         <template slot-scope="scope">
-          <el-image
-            style="max-width: 50px; max-height: 50px"
-            :src="scope.row.image">
-          </el-image>
+          <div label="视频2" align="center" prop="image" width="300" v-if="isVideo(scope.row)">
+            <template>
+              <video :src="scope.row.image" controls="controls" style="width: 300px">
+                您的浏览器不支持视频播放
+              </video>
+            </template>
+          </div>
+          <div label="图片" align="center" prop="image" width="300" v-else>
+            <template >
+              <el-image
+                style="max-width: 50px; max-height: 50px"
+                :src="scope.row.image">
+              </el-image>
+            </template>
+          </div>
         </template>
-      </el-table-column>>
+      </el-table-column>
       <el-table-column label="链接地址" align="center" prop="urls" />
       <el-table-column label="显示顺序" align="center" prop="sort" />
       <el-table-column label="显示" align="center" prop="isSticky" >
@@ -141,13 +141,19 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入标题" />
+          <el-input type="textarea"
+          autosize v-model="form.title" placeholder="请输入标题" />
         </el-form-item>
-        <el-form-item label="描述" prop="description">
+       <!-- <el-form-item label="描述" prop="description">
           <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
+        </el-form-item> -->
+        <el-form-item label="资讯内容" prop="description">
+          <el-input type="textarea"
+          autosize v-model="form.description" placeholder="请输入标题" />
+          <!-- <editor v-model="form.description" :min-height="192"/>/*  */ -->
         </el-form-item>
         <el-form-item label="图片">
-          <imageUpload v-model="form.image"/>
+          <FileUpload v-model="form.image"/>
         </el-form-item>
         <el-form-item label="分类" prop="type">
           <el-select v-model="form.type" placeholder="请选择分类">
@@ -171,22 +177,6 @@
             active-value="1"
             inactive-value="0"
           ></el-switch>
-        </el-form-item>
-        <el-form-item label="开始时间" prop="startTime">
-          <el-date-picker clearable size="small"
-            v-model="form.startTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择开始时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="结束时间" prop="endTime">
-          <el-date-picker clearable size="small"
-            v-model="form.endTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择结束时间">
-          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -246,9 +236,7 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        title: [
-          { required: true, message: '请输入标题', trigger: 'blur' },
-        ],
+
       }
     };
   },
@@ -377,6 +365,17 @@ export default {
       }).catch(function() {
         row.isDisplay = row.isDisplay === "0" ? "1" : "0";
       });
+    },
+    isVideo(row){
+      let type = row.image.match(/^(.*)(\.)(.{1,8})$/)[3];
+      //防止出问题，把获取到的所有结尾格式，全部转化为小写
+      type = type.toLowerCase();
+      var right_type = new Array("avi","wmv","mpg","mpeg","mov","rm","ram","swf","flv","mp4","mp3","wma","avi","rm","rmvb","flv","mpg","mkv")
+      for(var i=0; i<right_type.length; i++){
+        if(right_type[i] == type)
+          return true;
+      }
+      return false;
     }
   }
 };

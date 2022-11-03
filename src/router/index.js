@@ -220,6 +220,19 @@ export const constantRoutes = [
       },
     ]
   },
+  {
+    path: '/module',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'moduleDetail/:moduleId(\\d+)',
+        component: (resolve) => require(['@/views/business/module/moduleDetail'], resolve),
+        name: 'moduleDetail',
+        meta: { title: '模块详情', activeMenu: '/business/moduleDetail' }
+      }
+    ]
+  },
 ]
 
 export default new Router({

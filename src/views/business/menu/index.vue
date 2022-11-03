@@ -19,43 +19,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="父菜单ID" prop="parentId">
-        <el-input
-          v-model="queryParams.parentId"
-          placeholder="请输入父菜单ID"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="显示顺序" prop="orderNum">
-        <el-input
-          v-model="queryParams.orderNum"
-          placeholder="请输入显示顺序"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="请求地址" prop="url">
-        <el-input
-          v-model="queryParams.url"
-          placeholder="请输入请求地址"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
 
-      <el-form-item label="打开方式" prop="target">
-        <el-input
-          v-model="queryParams.target"
-          placeholder="请输入打开方式"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
 
       <el-form-item label="编码" prop="code">
         <el-input
@@ -66,6 +30,17 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="展示位置" prop="place">
+        <el-select v-model="queryParams.place" placeholder="请选择展示位置(0全部，1顶部，2底部)" clearable size="small">
+          <el-option
+            v-for="dict in dict.type.cmny_menu_place"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+  
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -118,19 +93,40 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="menuList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="菜单id" align="center" prop="navId" v-if="true"/>
+    <el-table v-if="refreshTable" v-loading="loading" :data="menuList" row-key="navId"
+      :default-expand-all="isExpandAll"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}" >
+<!--      <el-table-column label="菜单id" align="center" prop="navId" v-if="true"/> -->
       <el-table-column label="中文名称" align="center" prop="nameCn" />
       <el-table-column label="英文名称" align="center" prop="nameEn" />
       <el-table-column label="父菜单ID" align="center" prop="parentId" />
       <el-table-column label="显示顺序" align="center" prop="orderNum" />
       <el-table-column label="请求地址" align="center" prop="url" />
-      <el-table-column label="菜单状态" align="center" prop="visible" />
-      <el-table-column label="打开方式" align="center" prop="target" />
+      <el-table-column label="菜单状态" align="center" prop="visible">
+        <template slot-scope="scope">
+          <span v-if="scope.row.target == '0'">显示</span>
+          <span v-if="scope.row.target == '1'">隐藏</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="打开方式" align="center" prop="target">
+        <template slot-scope="scope">
+          <span v-if="scope.row.target == '0'">页签</span>
+          <span v-if="scope.row.target == '1'">新窗口</span>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="菜单级别" align="center" prop="level" />
       <el-table-column label="编码" align="center" prop="code" />
+      <el-table-column label="展示位置(0全部，1顶部，2底部)" align="center" prop="place">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.cmny_menu_place" :value="scope.row.place"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否推荐" align="center" prop="isRecommend">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.isRecommend"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -140,6 +136,13 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['business:menu:edit']"
           >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-plus"
+            @click="handleAdd(scope.row)"
+            v-hasPermi="['business:menu:add']"
+          >新增</el-button>
           <el-button
             size="mini"
             type="text"
@@ -162,6 +165,15 @@
     <!-- 添加或修改官网导航栏菜单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="上级菜单">
+          <treeselect
+            v-model="form.parentId"
+            :options="menuOptions"
+            :normalizer="normalizer"
+            :show-count="true"
+            placeholder="选择上级菜单"
+          />
+        </el-form-item>
         <el-form-item label="中文名称" prop="nameCn">
           <el-input v-model="form.nameCn" placeholder="请输入中文名称" />
         </el-form-item>
@@ -186,11 +198,26 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="菜单级别" prop="level">
-          <el-input v-model="form.level" placeholder="请输入菜单级别" />
-        </el-form-item>
         <el-form-item label="编码" prop="code">
           <el-input v-model="form.code" placeholder="请输入编码" />
+        </el-form-item>
+        <el-form-item label="展示位置">
+          <el-radio-group v-model="form.place">
+            <el-radio
+              v-for="dict in dict.type.cmny_menu_place"
+              :key="dict.value"
+:label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="是否推荐">
+          <el-radio-group v-model="form.isRecommend">
+            <el-radio
+              v-for="dict in dict.type.sys_yes_no"
+              :key="dict.value"
+:label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -203,15 +230,23 @@
 
 <script>
 import { listMenu, getMenu, delMenu, addMenu, updateMenu } from "@/api/business/menu";
-
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import IconSelect from "@/components/IconSelect";
 export default {
   name: "Menu",
+  dicts: ['cmny_menu_place', 'sys_yes_no'],
+  components: { Treeselect, IconSelect },
   data() {
     return {
       // 按钮loading
       buttonLoading: false,
       // 遮罩层
       loading: true,
+      // 是否展开，默认全部折叠
+      isExpandAll: false,
+      // 重新渲染表格状态
+      refreshTable: true,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -226,6 +261,8 @@ export default {
       menuList: [],
       // 弹出层标题
       title: "",
+      // 菜单树选项
+      menuOptions: [],
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -240,13 +277,32 @@ export default {
         visible: undefined,
         target: undefined,
         level: undefined,
-        code: undefined
+        code: undefined,
+        place: undefined,
+        isRecommend: undefined
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        
+        navId: [
+          { required: true, message: "菜单id不能为空", trigger: "blur" }
+        ],
+        nameCn: [
+          { required: true, message: "中文名称不能为空", trigger: "blur" }
+        ],
+        parentId: [
+          { required: true, message: "父菜单ID不能为空", trigger: "blur" }
+        ],
+        orderNum: [
+          { required: true, message: "显示顺序不能为空", trigger: "blur" }
+        ],
+        place: [
+          { required: true, message: "展示位置(0全部，1顶部，2底部)不能为空", trigger: "blur" }
+        ],
+        isRecommend: [
+          { required: true, message: "是否推荐不能为空", trigger: "blur" }
+        ]
       }
     };
   },
@@ -258,8 +314,8 @@ export default {
     getList() {
       this.loading = true;
       listMenu(this.queryParams).then(response => {
-        this.menuList = response.rows;
-        this.total = response.total;
+        this.menuList = this.handleTree(response.data, "navId");
+        // this.total = response.total;
         this.loading = false;
       });
     },
@@ -285,7 +341,9 @@ export default {
         updateTime: undefined,
         remark: undefined,
         level: undefined,
-        code: undefined
+        code: undefined,
+        place: "0",
+        isRecommend: "0"
       };
       this.resetForm("form");
     },
@@ -306,8 +364,14 @@ export default {
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd(row) {
       this.reset();
+      this.getTreeselect();
+      if (row != null && row.navId) {
+        this.form.parentId = row.navId;
+      } else {
+        this.form.parentId = 0;
+      }
       this.open = true;
       this.title = "添加官网导航栏菜单";
     },
@@ -367,7 +431,37 @@ export default {
       this.download('business/menu/export', {
         ...this.queryParams
       }, `menu_${new Date().getTime()}.xlsx`)
-    }
+    },
+    /** 查询菜单下拉树结构 */
+    getTreeselect() {
+      listMenu().then(response => {
+        console.log(""+response.data)
+        this.menuOptions = [];
+        const menu = { navId: 0, nameCn: '主类目', children: [] };
+        menu.children = this.handleTree(response.data, "navId");
+        this.menuOptions.push(menu);
+      });
+    },
+    /** 转换菜单数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.navId,
+        label: node.nameCn,
+        children: node.children
+
+      };
+    },
+    /** 展开/折叠操作 */
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+    },
   }
 };
 </script>
