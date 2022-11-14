@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模块标题" prop="moduleTitle">
+      <el-form-item label="模块标题" prop="moduleTitleCn">
         <el-input
-          v-model="queryParams.moduleTitle"
+          v-model="queryParams.moduleTitleCn"
           placeholder="请输入模块标题"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="模块标题描述" prop="moduleContent">
+      <el-form-item label="模块标题描述" prop="moduleContentCn">
         <el-input
-          v-model="queryParams.moduleContent"
+          v-model="queryParams.moduleContentCn"
           placeholder="请输入模块标题描述"
           clearable
           size="small"
@@ -83,9 +83,9 @@
     <el-table v-loading="loading" :data="moduleList" @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <!-- <el-table-column label="模块id" align="center" prop="moduleId" v-if="true"/> -->
-      <el-table-column label="模块标题" align="center" prop="moduleTitle" />
+      <el-table-column label="模块标题" align="center" prop="moduleTitleCn" />
       <el-table-column label="模块标题英文" align="center" prop="moduleTitleEn" />
-      <el-table-column label="模块标题描述" align="center" prop="moduleContent"  show-overflow-tooltip/>
+      <el-table-column label="模块标题描述" align="center" prop="moduleContentCn"  show-overflow-tooltip/>
       <el-table-column label="模块标题描述英文" align="center" prop="moduleContentEn"  show-overflow-tooltip/>
       <el-table-column label="模块编码" align="center" prop="moduleCode" />
       <el-table-column label="模块图片" align="center" prop="moduleImg">
@@ -135,14 +135,14 @@
     <!-- 添加或修改内容模块对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="模块标题" prop="moduleTitle">
-          <el-input v-model="form.moduleTitle" placeholder="请输入模块标题" />
+        <el-form-item label="模块标题" prop="moduleTitleCn">
+          <el-input v-model="form.moduleTitleCn" placeholder="请输入模块标题" />
         </el-form-item>
         <el-form-item label="模块标题英文" prop="moduleTitleEn">
           <el-input v-model="form.moduleTitleEn" placeholder="请输入模块标题英文" />
         </el-form-item>
-        <el-form-item label="模块标题描述" prop="moduleContent">
-          <el-input v-model="form.moduleContent" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="模块标题描述" prop="moduleContentCn">
+          <el-input v-model="form.moduleContentCn" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="模块标题描述英文" prop="moduleContentEn">
           <el-input v-model="form.moduleContentEn" type="textarea" placeholder="请输入内容英文" />
@@ -193,8 +193,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        moduleTitle: undefined,
-        moduleContent: undefined,
+        moduleTitleCn: undefined,
+        moduleContentCn: undefined,
         moduleCode: undefined,
         moduleImg: undefined,
         type: undefined,
@@ -232,8 +232,8 @@ export default {
     reset() {
       this.form = {
         moduleId: undefined,
-        moduleTitle: undefined,
-        moduleContent: undefined,
+        moduleTitleCn: undefined,
+        moduleContentCn: undefined,
         moduleCode: undefined,
         moduleImg: undefined,
         type: undefined,

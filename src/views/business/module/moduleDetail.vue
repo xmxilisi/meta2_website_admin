@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="详情标题" prop="title">
+      <el-form-item label="详情标题" prop="titleCn">
         <el-input
-          v-model="queryParams.title"
+          v-model="queryParams.titleCn"
           placeholder="请输入详情标题"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="内容" prop="content">
+      <el-form-item label="内容" prop="contentCn">
         <el-input
-          v-model="queryParams.content"
+          v-model="queryParams.contentCn"
           placeholder="请输入内容"
           clearable
           size="small"
@@ -52,9 +52,9 @@
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <!-- <el-table-column label="详情id" align="center" prop="detailId" v-if="true"/> -->
       <!-- <el-table-column label="关联模块id" align="center" prop="moduleId" /> -->
-      <el-table-column label="详情标题" align="center" prop="title" />
+      <el-table-column label="详情标题" align="center" prop="titleCn" />
       <el-table-column label="详情标题英文" align="center" prop="titleEn" />
-      <el-table-column label="内容" align="center" prop="content" show-overflow-tooltip/>
+      <el-table-column label="内容" align="center" prop="contentCn" show-overflow-tooltip/>
       <el-table-column label="内容英文" align="center" prop="contentEn" show-overflow-tooltip/>
       <el-table-column label="图片" align="center" prop="img">
         <template slot-scope="scope">
@@ -100,14 +100,14 @@
         <!-- <el-form-item label="关联模块id" prop="moduleId">
           <el-input v-model="form.moduleId" placeholder="请输入关联模块id" />
         </el-form-item> -->
-        <el-form-item label="详情标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入详情标题" />
+        <el-form-item label="详情标题" prop="titleCn">
+          <el-input v-model="form.titleCn" placeholder="请输入详情标题" />
         </el-form-item>
         <el-form-item label="详情标题英文" prop="titleEn">
           <el-input v-model="form.titleEn" placeholder="请输入详情标题英文" />
         </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <el-input v-model="form.content" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="内容" prop="contentCn">
+          <el-input v-model="form.contentCn" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="内容英文" prop="contentEn">
           <el-input v-model="form.contentEn" type="textarea" placeholder="请输入内容英文" />
@@ -162,8 +162,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         moduleId: undefined,
-        title: undefined,
-        content: undefined,
+        titleCn: undefined,
+        contentCn: undefined,
         img: undefined,
         code: undefined,
       },
@@ -204,8 +204,8 @@ export default {
       this.form = {
         detailId: undefined,
         moduleId: undefined,
-        title: undefined,
-        content: undefined,
+        titleCn: undefined,
+        contentCn: undefined,
         img: undefined,
         code: undefined,
         sort: undefined,

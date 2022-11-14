@@ -100,6 +100,11 @@
         </template>
       </el-table-column>
       <el-table-column label="安装包下载地址" align="center" prop="packageUrl" />
+      <el-table-column label="发布时间" align="center" prop="publishDate" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.publishDate, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -158,6 +163,14 @@
         </el-form-item>
         <el-form-item label="安装包下载地址">
           <fileUpload v-model="form.packageUrl"/>
+        </el-form-item>
+        <el-form-item label="发布时间" prop="publishDate">
+          <el-date-picker clearable size="small"
+            v-model="form.publishDate"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择发布时间">
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -264,7 +277,8 @@ export default {
         createBy: undefined,
         createTime: undefined,
         updateBy: undefined,
-        updateTime: undefined
+        updateTime: undefined,
+        publishDate: undefined
       };
       this.resetForm("form");
     },

@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="标题" prop="title">
+      <el-form-item label="标题" prop="titleCn">
         <el-input
-          v-model="queryParams.title"
+          v-model="queryParams.titleCn"
           placeholder="请输入标题"
           clearable
           size="small"
@@ -66,8 +66,10 @@
     <el-table v-loading="loading" :data="carouselList" @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <!-- <el-table-column label="id" align="center" prop="id" v-if="true"/> -->
-      <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column label="描述" align="center" prop="description" />
+      <el-table-column label="标题" align="center" prop="titleCn" />
+      <el-table-column label="标题英文" align="center" prop="titleEn" />
+      <el-table-column label="描述" align="center" prop="descriptionCn" />
+      <el-table-column label="描述英文" align="center" prop="descriptionEn" />
       <el-table-column label="图片" align="center" prop="image" width="300">
         <template slot-scope="scope">
           <div label="视频2" align="center" prop="image" width="300" v-if="isVideo(scope.row)">
@@ -89,6 +91,8 @@
       </el-table-column>
       <el-table-column label="链接地址" align="center" prop="urls" />
       <el-table-column label="显示顺序" align="center" prop="sort" />
+      <el-table-column label="seo标签" align="center" prop="seoLabel" />
+      <el-table-column label="seo描述" align="center" prop="seoDescribe" />
       <el-table-column label="显示" align="center" prop="isSticky" >
         <template slot-scope="scope">
           <el-switch
@@ -140,16 +144,25 @@
     <!-- 添加或修改轮播图管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="标题" prop="title">
+        <el-form-item label="标题" prop="titleCn">
           <el-input type="textarea"
-          autosize v-model="form.title" placeholder="请输入标题" />
+          autosize v-model="form.titleCn" placeholder="请输入标题" />
+        </el-form-item>
+        <el-form-item label="标题英文" prop="titleEn">
+          <el-input type="textarea"
+          autosize v-model="form.titleEn" placeholder="请输入标题" />
         </el-form-item>
        <!-- <el-form-item label="描述" prop="description">
           <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
         </el-form-item> -->
-        <el-form-item label="资讯内容" prop="description">
+        <el-form-item label="资讯内容" prop="descriptionCn">
           <el-input type="textarea"
-          autosize v-model="form.description" placeholder="请输入标题" />
+          autosize v-model="form.descriptionCn" placeholder="请输入标题" />
+          <!-- <editor v-model="form.description" :min-height="192"/>/*  */ -->
+        </el-form-item>
+        <el-form-item label="资讯内容英文" prop="descriptionEn">
+          <el-input type="textarea"
+          autosize v-model="form.descriptionEn" placeholder="请输入标题" />
           <!-- <editor v-model="form.description" :min-height="192"/>/*  */ -->
         </el-form-item>
         <el-form-item label="图片">
@@ -177,6 +190,14 @@
             active-value="1"
             inactive-value="0"
           ></el-switch>
+        </el-form-item>
+        <el-form-item label="seo标签逗号分隔" prop="seoLabel">
+          <el-input type="textarea"
+          autosize v-model="form.seoLabel" placeholder="请输入seo标签" />
+        </el-form-item>
+        <el-form-item label="seo描述" prop="seoDescribe">
+          <el-input type="textarea"
+          autosize v-model="form.seoDescribe" placeholder="请输入seo标签" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -222,8 +243,8 @@ export default {
         pageNum: 1,
         pageSize: 10,
         id: undefined,
-        title: undefined,
-        description: undefined,
+        titleCn: undefined,
+        descriptionCn: undefined,
         image: undefined,
         urls: undefined,
         sort: undefined,
@@ -262,8 +283,8 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        title: undefined,
-        description: undefined,
+        titleCn: undefined,
+        descriptionCn: undefined,
         image: undefined,
         urls: undefined,
         sort: undefined,
@@ -367,6 +388,10 @@ export default {
       });
     },
     isVideo(row){
+
+      if(row.image==""){
+        return false;
+      }
       let type = row.image.match(/^(.*)(\.)(.{1,8})$/)[3];
       //防止出问题，把获取到的所有结尾格式，全部转化为小写
       type = type.toLowerCase();
