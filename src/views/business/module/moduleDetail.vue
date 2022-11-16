@@ -64,6 +64,16 @@
           </el-image>
         </template>
        </el-table-column>
+       <el-table-column label="小图标" align="center" prop="icon">
+         <template slot-scope="scope">
+           <el-image
+             style="max-width: 50px; max-height: 50px"
+             :src="scope.row.icon">
+           </el-image>
+         </template>
+        </el-table-column>
+      <el-table-column label="小图标名称" align="center" prop="iconNameCn" show-overflow-tooltip/>
+      <el-table-column label="小图标名称英文" align="center" prop="iconNameEn" show-overflow-tooltip/>
       <el-table-column label="编码" align="center" prop="code" />
       <el-table-column label="序号" align="center" prop="sort" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -114,6 +124,15 @@
         </el-form-item>
         <el-form-item label="图片">
           <imageUpload v-model="form.img"/>
+        </el-form-item>
+        <el-form-item label="小图标">
+          <imageUpload v-model="form.icon"/>
+        </el-form-item>
+        <el-form-item label="小图标名称" prop="iconNameCn">
+          <el-input v-model="form.iconNameCn" type="textarea" placeholder="请输入名称" />
+        </el-form-item>
+        <el-form-item label="小图标名称英文" prop="iconNameEn">
+          <el-input v-model="form.iconNameEn" type="textarea" placeholder="请输入名称英文" />
         </el-form-item>
         <el-form-item label="编码" prop="code">
           <el-input v-model="form.code" placeholder="请输入编码" />

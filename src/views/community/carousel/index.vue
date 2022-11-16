@@ -70,6 +70,8 @@
       <el-table-column label="标题英文" align="center" prop="titleEn" />
       <el-table-column label="描述" align="center" prop="descriptionCn" />
       <el-table-column label="描述英文" align="center" prop="descriptionEn" />
+      <el-table-column label="描述2" align="center" prop="description2Cn" />
+      <el-table-column label="描述英文2" align="center" prop="description2En" />
       <el-table-column label="图片" align="center" prop="image" width="300">
         <template slot-scope="scope">
           <div label="视频2" align="center" prop="image" width="300" v-if="isVideo(scope.row)">
@@ -155,15 +157,22 @@
        <!-- <el-form-item label="描述" prop="description">
           <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
         </el-form-item> -->
-        <el-form-item label="资讯内容" prop="descriptionCn">
+        <el-form-item label="描述中文" prop="descriptionCn">
           <el-input type="textarea"
-          autosize v-model="form.descriptionCn" placeholder="请输入标题" />
-          <!-- <editor v-model="form.description" :min-height="192"/>/*  */ -->
+          autosize v-model="form.descriptionCn" placeholder="请输入描述" />
         </el-form-item>
-        <el-form-item label="资讯内容英文" prop="descriptionEn">
+        <el-form-item label="描述英文" prop="descriptionEn">
           <el-input type="textarea"
-          autosize v-model="form.descriptionEn" placeholder="请输入标题" />
-          <!-- <editor v-model="form.description" :min-height="192"/>/*  */ -->
+          autosize v-model="form.descriptionEn" placeholder="请输入描述" />
+        </el-form-item>
+        
+        <el-form-item label="描述2中文" prop="descriptionCn">
+          <el-input type="textarea"
+          autosize v-model="form.description2Cn" placeholder="请输入描述" />
+        </el-form-item>
+        <el-form-item label="描述2英文" prop="descriptionEn">
+          <el-input type="textarea"
+          autosize v-model="form.description2En" placeholder="请输入描述" />
         </el-form-item>
         <el-form-item label="图片">
           <FileUpload v-model="form.image"/>

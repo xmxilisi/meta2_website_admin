@@ -84,18 +84,34 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="" align="center" prop="id" v-if="true"/>
       <el-table-column label="信息类型编码" align="center" prop="code" />
-      <el-table-column label="信息类型名称" align="center" prop="label" />
+      <el-table-column label="信息类型名称英文" align="center" prop="labelCn" />
+      <el-table-column label="信息类型名称英文" align="center" prop="labelEn" />
       <!-- <el-table-column label="基本信息值" align="center" prop="value" /> -->
-      <el-table-column label="基本信息值" align="center" prop="value" width="300">
+      <el-table-column label="基本信息值" align="center" prop="valueCn" width="300">
         <template slot-scope="scope">
-          <div align="center" prop="value" width="300" v-if="scope.row.type==0">
-            {{scope.row.value}}
+          <div align="center" prop="valueCn" width="300" v-if="scope.row.type==0">
+            {{scope.row.valueCn}}
           </div>
-          <div align="center" prop="value" width="300" v-else>
+          <div align="center" prop="valueCn" width="300" v-else>
             <template >
               <el-image
                 style="max-width: 50px; max-height: 50px"
-                :src="scope.row.value">
+                :src="scope.row.valueCn">
+              </el-image>
+            </template>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="基本信息值英文" align="center" prop="valueEn" width="300">
+        <template slot-scope="scope">
+          <div align="center" prop="valueEn" width="300" v-if="scope.row.type==0">
+            {{scope.row.valueEn}}
+          </div>
+          <div align="center" prop="valueEn" width="300" v-else>
+            <template >
+              <el-image
+                style="max-width: 50px; max-height: 50px"
+                :src="scope.row.valueEn">
               </el-image>
             </template>
           </div>
@@ -137,10 +153,16 @@
           <el-input v-model="form.code" placeholder="请输入信息类型编码" />
         </el-form-item>
         <el-form-item label="信息类型名称" prop="label">
-          <el-input v-model="form.label" placeholder="请输入信息类型名称" />
+          <el-input v-model="form.labelCn" placeholder="请输入信息类型名称" />
         </el-form-item>
-        <el-form-item label="基本信息值" prop="value">
-          <el-input v-model="form.value" placeholder="请输入基本信息值" />
+        <el-form-item label="信息类型名称英文" prop="label">
+          <el-input v-model="form.labelEn" placeholder="请输入信息类型名称" />
+        </el-form-item>
+        <el-form-item label="基本信息值" prop="valueCn">
+          <el-input v-model="form.valueCn" placeholder="请输入基本信息值" />
+        </el-form-item>
+        <el-form-item label="基本信息值英文" prop="valueEn">
+          <el-input v-model="form.valueEn" placeholder="请输入基本信息值" />
         </el-form-item>
         <el-form-item label="状态" prop="type">
           <el-radio-group v-model="form.type">
@@ -148,7 +170,10 @@
             <el-radio label="1">图片</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="图片上传">          <imageUpload v-model="form.value"/>        </el-form-item>
+        <el-form-item label="中文图片上传">          <imageUpload v-model="form.valueCn"/>        </el-form-item>
+        <el-form-item label="英文图片上传">
+          <imageUpload v-model="form.valueEn"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -204,10 +229,10 @@ export default {
         code: [
           { required: true, message: "信息类型编码不能为空", trigger: "blur" }
         ],
-        label: [
+        labelCn: [
           { required: true, message: "信息类型名称不能为空", trigger: "blur" }
         ],
-        value: [
+        valueCn: [
           { required: true, message: "基本信息值不能为空", trigger: "blur" }
         ],
         type: [
@@ -239,8 +264,10 @@ export default {
       this.form = {
         id: undefined,
         code: undefined,
-        label: undefined,
-        value: undefined,
+        labelCn: undefined,
+        labelEn: undefined,
+        valueCn: undefined,
+        valueEn: undefined,
         delFlag: undefined,
         createBy: undefined,
         createTime: undefined,
