@@ -151,75 +151,8 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/news',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'detail',
-        component: (resolve) => require(['@/views/community/news/detail'], resolve),
-        name: 'detail',
-        meta: { title: '新增资讯', activeMenu: '/news/news'}
-      },
-      {
-        path: 'comment',
-        component: (resolve) => require(['@/views/community/news/comment'], resolve),
-        name: 'comment',
-        meta: { title: '查看评论', activeMenu: '/news/news'}
-      },
-      {
-        path: 'comment2',
-        component: (resolve) => require(['@/views/community/news/comment2'], resolve),
-        name: 'comment2',
-        meta: { title: '查看评论回复', activeMenu: '/news/news'}
-      },
-    ]
-  },
-  {
-    path: '/newsChinese',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'detail',
-        component: (resolve) => require(['@/views/community/newsChinese/detail'], resolve),
-        name: 'detail',
-        meta: { title: '新增资讯（中文）', activeMenu: '/news/newsChinese'}
-      },
-      {
-        path: 'comment',
-        component: (resolve) => require(['@/views/community/newsChinese/comment'], resolve),
-        name: 'comment',
-        meta: { title: '查看评论（中文）', activeMenu: '/news/newsChinese'}
-      },
-      {
-        path: 'comment2',
-        component: (resolve) => require(['@/views/community/newsChinese/comment2'], resolve),
-        name: 'comment2',
-        meta: { title: '查看评论回复（中文）', activeMenu: '/news/newsChinese'}
-      },
-    ]
-  },
-  {
-    path: '/threads',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'posts',
-        component: (resolve) => require(['@/views/community/threads/posts'], resolve),
-        name: 'posts',
-        meta: { title: '查看评论', activeMenu: '/community/threads'}
-      },
-      {
-        path: 'posts2',
-        component: (resolve) => require(['@/views/community/threads/posts2'], resolve),
-        name: 'posts2',
-        meta: { title: '查看评论回复', activeMenu: '/community/threads'}
-      },
-    ]
-  },
+
+  
   {
     path: '/module',
     component: Layout,
