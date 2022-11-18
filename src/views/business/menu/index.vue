@@ -114,7 +114,8 @@
           <span v-if="scope.row.target == '1'">新窗口</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="备注中文" align="center" prop="remarkCn" />
+      <el-table-column label="备注英文" align="center" prop="remarkEn" />
       <el-table-column label="菜单级别" align="center" prop="level" />
       <el-table-column label="编码" align="center" prop="code" />
       <el-table-column label="展示位置(0全部，1顶部，2底部)" align="center" prop="place">
@@ -195,8 +196,11 @@
         <el-form-item label="打开方式" prop="target">
           <el-input v-model="form.target" placeholder="请输入打开方式" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="备注中文" prop="remarkCn">
+          <el-input v-model="form.remarkCn" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="备注英文" prop="remarkEn">
+          <el-input v-model="form.remarkEn" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="编码" prop="code">
           <el-input v-model="form.code" placeholder="请输入编码" />
@@ -339,7 +343,8 @@ export default {
         createTime: undefined,
         updateBy: undefined,
         updateTime: undefined,
-        remark: undefined,
+        remarkCn: undefined,
+        remarkEn: undefined,
         level: undefined,
         code: undefined,
         place: "0",
