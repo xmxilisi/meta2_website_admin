@@ -93,8 +93,8 @@
       </el-table-column>
       <el-table-column label="链接地址" align="center" prop="urls" />
       <el-table-column label="显示顺序" align="center" prop="sort" />
-      <el-table-column label="seo标签" align="center" prop="seoLabel" />
-      <el-table-column label="seo描述" align="center" prop="seoDescribe" />
+      <!-- <el-table-column label="seo标签" align="center" prop="seoLabel" /> -->
+      <!-- <el-table-column label="seo描述" align="center" prop="seoDescribe" /> -->
       <el-table-column label="显示" align="center" prop="isSticky" >
         <template slot-scope="scope">
           <el-switch
@@ -165,7 +165,7 @@
           <el-input type="textarea"
           autosize v-model="form.descriptionEn" placeholder="请输入描述" />
         </el-form-item>
-        
+
         <el-form-item label="描述2中文" prop="descriptionCn">
           <el-input type="textarea"
           autosize v-model="form.description2Cn" placeholder="请输入描述" />
@@ -200,14 +200,14 @@
             inactive-value="0"
           ></el-switch>
         </el-form-item>
-        <el-form-item label="seo标签逗号分隔" prop="seoLabel">
+       <!-- <el-form-item label="seo标签逗号分隔" prop="seoLabel">
           <el-input type="textarea"
           autosize v-model="form.seoLabel" placeholder="请输入seo标签" />
         </el-form-item>
         <el-form-item label="seo描述" prop="seoDescribe">
           <el-input type="textarea"
           autosize v-model="form.seoDescribe" placeholder="请输入seo标签" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>

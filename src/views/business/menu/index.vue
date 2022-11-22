@@ -40,7 +40,7 @@
           />
         </el-select>
       </el-form-item>
-  
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -205,6 +205,24 @@
         <el-form-item label="编码" prop="code">
           <el-input v-model="form.code" placeholder="请输入编码" />
         </el-form-item>
+        <el-form-item label="seo标题中文" prop="seoTitleCn">
+          <el-input v-model="form.seoTitleCn" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="seo标题英文" prop="seoTitleEn">
+          <el-input v-model="form.seoTitleEn" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="seo标签中文" prop="seoLabelCn">
+          <el-input v-model="form.seoLabelCn" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="seo标签英文" prop="seoLabelEn">
+          <el-input v-model="form.seoLabelEn" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="seo描述中文" prop="seoDescribeCn">
+          <el-input v-model="form.seoDescribeCn" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="seo描述英文" prop="seoDescribeEn">
+          <el-input v-model="form.seoDescribeEn" placeholder="请输入" />
+        </el-form-item>
         <el-form-item label="展示位置">
           <el-radio-group v-model="form.place">
             <el-radio
@@ -347,6 +365,12 @@ export default {
         remarkEn: undefined,
         level: undefined,
         code: undefined,
+        seoTitleCn: undefined,
+        seoTitleEn: undefined,
+        seoLabelCn: undefined,
+        seoLabelEn: undefined,
+        seoDescribeCn: undefined,
+        seoDescribeEn: undefined,
         place: "0",
         isRecommend: "0"
       };
