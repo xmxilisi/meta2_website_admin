@@ -2,22 +2,11 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.name" placeholder="请输入名称" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="类型" prop="type">
         <el-select v-model="queryParams.type" placeholder="请选择类型" clearable size="small">
-          <el-option
-            v-for="dict in dict.type.cmny_app_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.cmny_app_type" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -28,14 +17,7 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['business:downloadInfo:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPermi="['business:downloadInfo:add']">新增</el-button>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button
@@ -80,22 +62,18 @@
       <el-table-column label="版本" align="center" prop="version" />
       <el-table-column label="类型" align="center" prop="type">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.cmny_app_type" :value="scope.row.type"/>
+          <dict-tag :options="dict.type.cmny_app_type" :value="scope.row.type" />
         </template>
       </el-table-column>
       <el-table-column label="二维码图片路径" align="center" prop="url">
         <template slot-scope="scope">
-          <el-image
-            style="max-width: 50px; max-height: 50px"
-            :src="scope.row.url">
+          <el-image style="max-width: 50px; max-height: 50px" :src="scope.row.url">
           </el-image>
         </template>
       </el-table-column>
       <el-table-column label="图标" align="center" prop="icon">
         <template slot-scope="scope">
-          <el-image
-            style="max-width: 50px; max-height: 50px"
-            :src="scope.row.icon">
+          <el-image style="max-width: 50px; max-height: 50px" :src="scope.row.icon">
           </el-image>
         </template>
       </el-table-column>
@@ -107,35 +85,17 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['business:downloadInfo:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['business:downloadInfo:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['business:downloadInfo:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['business:downloadInfo:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改app版本下载信息管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="50vw" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="130px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
@@ -147,29 +107,20 @@
         </el-form-item>
         <el-form-item label="类型" prop="type">
           <el-select v-model="form.type" placeholder="请选择类型">
-            <el-option
-              v-for="dict in dict.type.cmny_app_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+            <el-option v-for="dict in dict.type.cmny_app_type" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="二维码图片路径">
-          <imageUpload v-model="form.url"/>
+          <imageUpload v-model="form.url" />
         </el-form-item>
         <el-form-item label="图标">
-          <imageUpload v-model="form.icon"/>
+          <imageUpload v-model="form.icon" />
         </el-form-item>
         <el-form-item label="安装包下载地址">
-          <fileUpload v-model="form.packageUrl"/>
+          <fileUpload v-model="form.packageUrl" />
         </el-form-item>
         <el-form-item label="发布时间" prop="publishDate">
-          <el-date-picker clearable size="small"
-            v-model="form.publishDate"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择发布时间">
+          <el-date-picker clearable size="small" v-model="form.publishDate" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择发布时间">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -187,7 +138,7 @@ import { listDownloadInfo, getDownloadInfo, delDownloadInfo, addDownloadInfo, up
 export default {
   name: "DownloadInfo",
   dicts: ['cmny_app_type'],
-  data() {
+  data () {
     return {
       // 按钮loading
       buttonLoading: false,
@@ -244,12 +195,12 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.getList();
   },
   methods: {
     /** 查询app版本下载信息管理列表 */
-    getList() {
+    getList () {
       this.loading = true;
       listDownloadInfo(this.queryParams).then(response => {
         this.downloadInfoList = response.rows;
@@ -258,12 +209,12 @@ export default {
       });
     },
     // 取消按钮
-    cancel() {
+    cancel () {
       this.open = false;
       this.reset();
     },
     // 表单重置
-    reset() {
+    reset () {
       this.form = {
         downloadId: undefined,
         name: undefined,
@@ -283,29 +234,29 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
       this.resetForm("queryForm");
       this.handleQuery();
     },
     // 多选框选中数据
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.ids = selection.map(item => item.downloadId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd () {
       this.reset();
       this.open = true;
       this.title = "添加app版本下载信息管理";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate (row) {
       this.loading = true;
       this.reset();
       const downloadId = row.downloadId || this.ids
@@ -317,7 +268,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm() {
+    submitForm () {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
@@ -342,7 +293,7 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    handleDelete (row) {
       const downloadIds = row.downloadId || this.ids;
       this.$modal.confirm('是否确认删除app版本下载信息管理编号为"' + downloadIds + '"的数据项？').then(() => {
         this.loading = true;
@@ -356,7 +307,7 @@ export default {
       });
     },
     /** 导出按钮操作 */
-    handleExport() {
+    handleExport () {
       this.download('business/downloadInfo/export', {
         ...this.queryParams
       }, `downloadInfo_${new Date().getTime()}.xlsx`)

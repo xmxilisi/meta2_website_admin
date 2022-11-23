@@ -1,32 +1,14 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="模块标题" prop="moduleTitleCn">
-        <el-input
-          v-model="queryParams.moduleTitleCn"
-          placeholder="请输入模块标题"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.moduleTitleCn" placeholder="请输入模块标题" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="模块标题描述" prop="moduleContentCn">
-        <el-input
-          v-model="queryParams.moduleContentCn"
-          placeholder="请输入模块标题描述"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.moduleContentCn" placeholder="请输入模块标题描述" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="模块编码" prop="moduleCode">
-        <el-input
-          v-model="queryParams.moduleCode"
-          placeholder="请输入模块编码"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.moduleCode" placeholder="请输入模块编码" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -36,14 +18,7 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['business:module:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPermi="['business:module:add']">新增</el-button>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button
@@ -85,56 +60,30 @@
       <!-- <el-table-column label="模块id" align="center" prop="moduleId" v-if="true"/> -->
       <el-table-column label="模块标题" align="center" prop="moduleTitleCn" />
       <el-table-column label="模块标题英文" align="center" prop="moduleTitleEn" />
-      <el-table-column label="模块标题描述" align="center" prop="moduleContentCn"  show-overflow-tooltip/>
-      <el-table-column label="模块标题描述英文" align="center" prop="moduleContentEn"  show-overflow-tooltip/>
+      <el-table-column label="模块标题描述" align="center" prop="moduleContentCn" show-overflow-tooltip />
+      <el-table-column label="模块标题描述英文" align="center" prop="moduleContentEn" show-overflow-tooltip />
       <el-table-column label="模块编码" align="center" prop="moduleCode" />
       <el-table-column label="模块图片" align="center" prop="moduleImg">
-        <template slot-scope="scope">
-          <el-image
-            style="max-width: 50px; max-height: 50px"
-            :src="scope.row.moduleImg">
+        <template slot-scope="scope" v-if="scope.row.moduleImg">
+          <el-image style="max-width: 50px; max-height: 50px" :src="scope.row.moduleImg">
           </el-image>
         </template>
-       </el-table-column>
+      </el-table-column>
       <el-table-column label="所属类型" align="center" prop="type" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['business:module:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['business:module:remove']"
-          >删除</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handlemoduleDetail(scope.row)"
-            v-hasPermi="['business:moduleDetail:edit']"
-          >内容管理</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['business:module:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['business:module:remove']">删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handlemoduleDetail(scope.row)" v-hasPermi="['business:moduleDetail:edit']">内容管理</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改内容模块对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="50vw" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="130px">
         <el-form-item label="模块标题" prop="moduleTitleCn">
           <el-input v-model="form.moduleTitleCn" placeholder="请输入模块标题" />
         </el-form-item>
@@ -142,16 +91,16 @@
           <el-input v-model="form.moduleTitleEn" placeholder="请输入模块标题英文" />
         </el-form-item>
         <el-form-item label="模块标题描述" prop="moduleContentCn">
-          <el-input v-model="form.moduleContentCn" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.moduleContentCn" type="textarea" placeholder="请输入内容" autosize resize="none" />
         </el-form-item>
         <el-form-item label="模块标题描述英文" prop="moduleContentEn">
-          <el-input v-model="form.moduleContentEn" type="textarea" placeholder="请输入内容英文" />
+          <el-input v-model="form.moduleContentEn" type="textarea" placeholder="请输入内容英文" autosize resize="none" />
         </el-form-item>
         <el-form-item label="模块编码" prop="moduleCode">
           <el-input v-model="form.moduleCode" placeholder="请输入模块编码" />
         </el-form-item>
         <el-form-item label="模块图片">
-          <imageUpload v-model="form.moduleImg"/>
+          <imageUpload v-model="form.moduleImg" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -167,7 +116,7 @@ import { listmodule, getmodule, delmodule, addmodule, updatemodule } from "@/api
 
 export default {
   name: "module",
-  data() {
+  data () {
     return {
       // 按钮loading
       buttonLoading: false,
@@ -209,13 +158,13 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.queryParams.type = this.$route.query.type;
     this.getList();
   },
   methods: {
     /** 查询内容模块列表 */
-    getList() {
+    getList () {
       this.loading = true;
       listmodule(this.queryParams).then(response => {
         this.moduleList = response.rows;
@@ -224,12 +173,12 @@ export default {
       });
     },
     // 取消按钮
-    cancel() {
+    cancel () {
       this.open = false;
       this.reset();
     },
     // 表单重置
-    reset() {
+    reset () {
       this.form = {
         moduleId: undefined,
         moduleTitleCn: undefined,
@@ -246,29 +195,29 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
       this.resetForm("queryForm");
       this.handleQuery();
     },
     // 多选框选中数据
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.ids = selection.map(item => item.moduleId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd () {
       this.reset();
       this.open = true;
       this.title = "添加内容模块";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate (row) {
       this.loading = true;
       this.reset();
       const moduleId = row.moduleId || this.ids
@@ -280,7 +229,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm() {
+    submitForm () {
       this.$refs["form"].validate(valid => {
         this.form.type = this.$route.query.type;
         if (valid) {
@@ -306,7 +255,7 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    handleDelete (row) {
       const moduleIds = row.moduleId || this.ids;
       this.$modal.confirm('是否确认删除内容模块编号为"' + moduleIds + '"的数据项？').then(() => {
         this.loading = true;
@@ -320,13 +269,13 @@ export default {
       });
     },
     /** 导出按钮操作 */
-    handleExport() {
+    handleExport () {
       this.download('business/module/export', {
         ...this.queryParams
       }, `module_${new Date().getTime()}.xlsx`)
     },
     /** 新增内容详情操作 */
-    handlemoduleDetail: function(row) {
+    handlemoduleDetail: function (row) {
       const moduleId = row.moduleId;
       this.$router.push("/module/moduleDetail/" + moduleId);
     }

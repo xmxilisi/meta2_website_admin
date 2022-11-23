@@ -43,7 +43,7 @@
       <!--      <el-table-column label="菜单id" align="center" prop="navId" v-if="true"/> -->
       <el-table-column label="中文名称" align="center" prop="nameCn" />
       <el-table-column label="英文名称" align="center" prop="nameEn" />
-      <el-table-column label="父菜单ID" align="center" prop="parentId" />
+      <!-- <el-table-column label="父菜单ID" align="center" prop="parentId" /> -->
       <el-table-column label="显示顺序" align="center" prop="orderNum" />
       <el-table-column label="请求地址" align="center" prop="url" />
       <el-table-column label="菜单状态" align="center" prop="visible">
@@ -52,17 +52,17 @@
           <span v-if="scope.row.target == '1'">隐藏</span>
         </template>
       </el-table-column>
-      <el-table-column label="打开方式" align="center" prop="target">
+      <!-- <el-table-column label="打开方式" align="center" prop="target">
         <template slot-scope="scope">
           <span v-if="scope.row.target == '0'">页签</span>
           <span v-if="scope.row.target == '1'">新窗口</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="备注中文" align="center" prop="remarkCn" />
       <el-table-column label="备注英文" align="center" prop="remarkEn" />
-      <el-table-column label="菜单级别" align="center" prop="level" />
+      <!-- <el-table-column label="菜单级别" align="center" prop="level" /> -->
       <el-table-column label="编码" align="center" prop="code" />
-      <el-table-column label="展示位置(0全部，1顶部，2底部)" align="center" prop="place">
+      <el-table-column label="展示位置" align="center" prop="place">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.cmny_menu_place" :value="scope.row.place" />
         </template>
@@ -84,7 +84,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改官网导航栏菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="50vw" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="上级菜单">
           <treeselect v-model="form.parentId" :options="menuOptions" :normalizer="normalizer" :show-count="true" placeholder="选择上级菜单" />
@@ -94,9 +94,6 @@
         </el-form-item>
         <el-form-item label="英文名称" prop="nameEn">
           <el-input v-model="form.nameEn" placeholder="请输入英文名称" />
-        </el-form-item>
-        <el-form-item label="父菜单ID" prop="parentId">
-          <el-input v-model="form.parentId" placeholder="请输入父菜单ID" />
         </el-form-item>
         <el-form-item label="显示顺序" prop="orderNum">
           <el-input v-model="form.orderNum" placeholder="请输入显示顺序" />
