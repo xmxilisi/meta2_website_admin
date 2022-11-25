@@ -1,7 +1,7 @@
 {
   "name": "cyris_community_vue",
   "version": "3.4.0",
-  "description": "官网后台管理系统",
+  "description": "Meta+ 官网后台管理系统",
   "author": "Cyris",
   "license": "MIT",
   "scripts": {

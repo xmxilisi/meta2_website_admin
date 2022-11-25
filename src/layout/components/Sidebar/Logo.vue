@@ -26,16 +26,16 @@ export default {
     }
   },
   computed: {
-    variables() {
+    variables () {
       return variables;
     },
-    sideTheme() {
+    sideTheme () {
       return this.$store.state.settings.sideTheme
     }
   },
-  data() {
+  data () {
     return {
-      title: '官网',
+      title: 'Meta+ 官网',
       logo: logoImg
     }
   }
