@@ -122,18 +122,18 @@
         <el-form-item label="seo标题英文" prop="seoTitleEn">
           <el-input v-model="form.seoTitleEn" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="seo标签中文" prop="seoLabelCn">
+        <el-form-item label="seo标签" prop="seoLabelCn">
           <el-input v-model="form.seoLabelCn" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="seo标签英文" prop="seoLabelEn">
+        <!-- <el-form-item label="seo标签英文" prop="seoLabelEn">
           <el-input v-model="form.seoLabelEn" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="seo描述中文" prop="seoDescribeCn">
+        </el-form-item> -->
+        <el-form-item label="seo描述" prop="seoDescribeCn">
           <el-input v-model="form.seoDescribeCn" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="seo描述英文" prop="seoDescribeEn">
+        <!-- <el-form-item label="seo描述英文" prop="seoDescribeEn">
           <el-input v-model="form.seoDescribeEn" placeholder="请输入" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="展示位置">
           <el-radio-group v-model="form.place">
             <el-radio v-for="dict in dict.type.cmny_menu_place" :key="dict.value" :label="dict.value">{{dict.label}}</el-radio>
