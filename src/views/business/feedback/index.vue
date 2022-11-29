@@ -1,53 +1,20 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="客户称呼" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入客户称呼"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.name" placeholder="请输入客户称呼" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="手机号码" prop="mobile">
-        <el-input
-          v-model="queryParams.mobile"
-          placeholder="请输入手机号码"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.mobile" placeholder="请输入手机号码" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="公司" prop="company">
-        <el-input
-          v-model="queryParams.company"
-          placeholder="请输入公司"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.company" placeholder="请输入公司" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input
-          v-model="queryParams.email"
-          placeholder="请输入邮箱"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.email" placeholder="请输入邮箱" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="创建时间">
-        <el-date-picker
-          v-model="daterangeCreateTime"
-          size="small"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
+        <el-date-picker v-model="daterangeCreateTime" size="small" style="width: 240px" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -103,7 +70,7 @@
 
     <el-table v-loading="loading" :data="feedbackList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="" align="center" prop="feedbackId" v-if="true"/>
+      <el-table-column label="" align="center" prop="feedbackId" v-if="true" />
       <el-table-column label="客户称呼" align="center" prop="name" />
       <el-table-column label="手机区号" align="center" prop="areaCode" />
       <el-table-column label="手机号码" align="center" prop="mobile" />
@@ -112,7 +79,7 @@
 
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.cmny_handle_status" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.cmny_handle_status" :value="scope.row.status" />
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -127,32 +94,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.status === '0'"
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleStatus(scope.row)"
-            v-hasPermi="['business:feedback:edit']"
-          >处理</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['business:feedback:remove']"
-          >删除</el-button>
+          <el-button v-if="scope.row.status === '0'" size="mini" type="text" icon="el-icon-edit" @click="handleStatus(scope.row)" v-hasPermi="['business:feedback:edit']">处理</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['business:feedback:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改留言反馈对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -182,12 +130,12 @@
 </template>
 
 <script>
-import { listFeedback, getFeedback, delFeedback, addFeedback, updateFeedback,handleStatus  } from "@/api/business/feedback";
+import { listFeedback, getFeedback, delFeedback, addFeedback, updateFeedback, handleStatus } from "@/api/business/feedback";
 
 export default {
   name: "Feedback",
   dicts: ['cmny_handle_status'],
-  data() {
+  data () {
     return {
       // 按钮loading
       buttonLoading: false,
@@ -250,12 +198,12 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.getList();
   },
   methods: {
     /** 查询留言反馈列表 */
-    getList() {
+    getList () {
       this.loading = true;
       this.queryParams.params = {};
       if (null != this.daterangeCreateTime && '' != this.daterangeCreateTime) {
@@ -269,12 +217,12 @@ export default {
       });
     },
     // 取消按钮
-    cancel() {
+    cancel () {
       this.open = false;
       this.reset();
     },
     // 表单重置
-    reset() {
+    reset () {
       this.form = {
         feedbackId: undefined,
         name: undefined,
@@ -292,30 +240,30 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
       this.daterangeCreateTime = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
     // 多选框选中数据
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.ids = selection.map(item => item.feedbackId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd () {
       this.reset();
       this.open = true;
       this.title = "添加留言反馈";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate (row) {
       this.loading = true;
       this.reset();
       const feedbackId = row.feedbackId || this.ids
@@ -327,7 +275,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm() {
+    submitForm () {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
@@ -352,7 +300,7 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    handleDelete (row) {
       const feedbackIds = row.feedbackId || this.ids;
       this.$modal.confirm('是否确认删除留言反馈编号为"' + feedbackIds + '"的数据项？').then(() => {
         this.loading = true;
@@ -366,13 +314,13 @@ export default {
       });
     },
     /** 导出按钮操作 */
-    handleExport() {
+    handleExport () {
       this.download('business/feedback/export', {
         ...this.queryParams
       }, `feedback_${new Date().getTime()}.xlsx`)
     },
     /** 处理按钮操作 */
-    handleStatus(row) {
+    handleStatus (row) {
       const feedbackIds = row.feedbackId || this.ids;
       this.$modal.confirm('是否确认处理留言反馈编号为"' + feedbackIds + '"的数据项？').then(() => {
         this.loading = true;

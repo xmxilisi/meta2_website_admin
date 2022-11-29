@@ -1,44 +1,17 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="标识ID" prop="noticeId">
-        <el-input
-          v-model="queryParams.noticeId"
-          placeholder="标识ID"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.noticeId" placeholder="标识ID" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="用户id" prop="memberId">
-        <el-input
-          v-model="queryParams.memberId"
-          placeholder="请输入用户id"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.memberId" placeholder="请输入用户id" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="通知数据" prop="data">
-        <el-input
-          v-model="queryParams.data"
-          placeholder="请输入通知数据"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.data" placeholder="请输入通知数据" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="提交时间">
-        <el-date-picker
-          v-model="dateRangeCreateTime"
-          size="small"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
+        <el-date-picker v-model="dateRangeCreateTime" size="small" style="width: 240px" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -48,22 +21,14 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['community:notificationTiming:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPermi="['community:notificationTiming:remove']">删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="notificationTimingList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" v-if="true"/>
+      <el-table-column label="id" align="center" prop="id" v-if="true" />
       <el-table-column label="标识ID" align="center" prop="noticeId" />
       <el-table-column label="接收通知的用户id" align="center" prop="memberId" />
       <el-table-column label="通知条数" align="center" prop="number" />
@@ -73,31 +38,19 @@
           <span>{{ parseTime(scope.row.expiredAt, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="提交时间" align="center" prop="createTime" >
+      <el-table-column label="提交时间" align="center" prop="createTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['community:notificationTiming:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['community:notificationTiming:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
   </div>
 </template>
@@ -107,7 +60,7 @@ import { listNotificationTiming, delNotificationTiming } from "@/api/community/n
 
 export default {
   name: "NotificationTiming",
-  data() {
+  data () {
     return {
       // 按钮loading
       buttonLoading: false,
@@ -150,12 +103,12 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.getList();
   },
   methods: {
     /** 查询通知发送记录列表 */
-    getList() {
+    getList () {
       this.loading = true;
       listNotificationTiming(this.queryParams).then(response => {
         this.notificationTimingList = response.rows;
@@ -164,15 +117,15 @@ export default {
       });
     },
     // 取消按钮
-    cancel() {
+    cancel () {
       this.open = false;
       this.reset();
     },
     // 表单重置
-    reset() {
+    reset () {
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.queryParams.pageNum = 1;
       this.queryParams.params = {};
       if (null != this.dateRangeCreateTime && '' != this.dateRangeCreateTime) {
@@ -182,16 +135,16 @@ export default {
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
     },
     // 多选框选中数据
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    handleDelete (row) {
       const ids = row.id || this.ids;
       this.$modal.confirm('是否确认删除通知发送记录编号为"' + ids + '"的数据项？').then(() => {
         this.loading = true;

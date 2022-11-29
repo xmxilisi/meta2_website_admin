@@ -12,19 +12,14 @@
       </el-tooltip>
     </el-row>
     <el-dialog :title="title" :visible.sync="open" append-to-body>
-      <el-transfer
-        :titles="['显示', '隐藏']"
-        v-model="value"
-        :data="columns"
-        @change="dataChange"
-      ></el-transfer>
+      <el-transfer :titles="['显示', '隐藏']" v-model="value" :data="columns" @change="dataChange"></el-transfer>
     </el-dialog>
   </div>
 </template>
 <script>
 export default {
   name: "RightToolbar",
-  data() {
+  data () {
     return {
       // 显隐数据
       value: [],
@@ -43,7 +38,7 @@ export default {
       type: Array,
     },
   },
-  created() {
+  created () {
     // 显隐列初始默认隐藏列
     for (let item in this.columns) {
       if (this.columns[item].visible === false) {
@@ -53,22 +48,22 @@ export default {
   },
   methods: {
     // 搜索
-    toggleSearch() {
+    toggleSearch () {
       this.$emit("update:showSearch", !this.showSearch);
     },
     // 刷新
-    refresh() {
+    refresh () {
       this.$emit("queryTable");
     },
     // 右侧列表元素变化
-    dataChange(data) {
+    dataChange (data) {
       for (let item in this.columns) {
         const key = this.columns[item].key;
         this.columns[item].visible = !data.includes(key);
       }
     },
     // 打开显隐列dialog
-    showColumn() {
+    showColumn () {
       this.open = true;
     },
   },
@@ -83,5 +78,14 @@ export default {
 }
 ::v-deep .el-transfer__button:first-child {
   margin-bottom: 10px;
+}
+/deep/ .el-button {
+  padding: 0 !important;
+  max-width: 30px;
+  min-width: 30px !important;
+  max-height: 30px;
+  min-height: 30px !important;
+  line-height: 30px !important;
+  box-sizing: border-box;
 }
 </style>

@@ -1,60 +1,24 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-wmemberIdth="68px">
+    <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" v-show="showSearch" label-wmemberIdth="68px">
       <el-form-item label="用户ID" prop="memberId">
-        <el-input
-          v-model="queryParams.memberId"
-          placeholder="请输入用户ID"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.memberId" placeholder="请输入用户ID" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="用户名" prop="memberName">
-        <el-input
-          v-model="queryParams.memberName"
-          placeholder="请输入用户名"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.memberName" placeholder="请输入用户名" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="用户昵称" prop="nickname">
-        <el-input
-          v-model="queryParams.nickname"
-          placeholder="请输入用户昵称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.nickname" placeholder="请输入用户昵称" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
 
       <el-form-item label="邮箱" prop="email">
-        <el-input
-          v-model="queryParams.email"
-          placeholder="请输入邮箱"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.email" placeholder="请输入邮箱" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          placeholder="用户状态"
-          clearable
-          size="small"
-          style="width: 240px"
-        >
-          <el-option
-            v-for="dict in dict.type.cmny_member_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+        <el-select v-model="queryParams.status" placeholder="用户状态" clearable size="small" style="width: 240px">
+          <el-option v-for="dict in dict.type.cmny_member_status" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
-
 
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -64,48 +28,23 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['member:member:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPermi="['member:member:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['member:member:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPermi="['member:member:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['member:member:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPermi="['member:member:remove']">删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="memberList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" wmemberIdth="55" align="center" />
-      <el-table-column label="用户ID" align="center" prop="memberId" v-if="true" width="100"/>
+      <el-table-column label="用户ID" align="center" prop="memberId" v-if="true" width="100" />
       <el-table-column label="头像" align="center" prop="avatar" width="100">
         <template slot-scope="scope">
-          <el-image
-            style="width: 50px; height: 50px"
-            :src="scope.row.avatar">
+          <el-image style="width: 50px; height: 50px" :src="scope.row.avatar">
           </el-image>
         </template>
       </el-table-column>>
@@ -115,7 +54,7 @@
 
       <el-table-column label="用户状态" align="center" prop="status" width="100">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.cmny_member_status" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.cmny_member_status" :value="scope.row.status" />
         </template>
       </el-table-column>
       <el-table-column label="最后登录时间" align="center" prop="loginAt" width="180">
@@ -125,46 +64,16 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleResetPwd(scope.row)"
-            v-hasPermi="['member:member:resetPwd']"
-          >重置密码</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleClose(scope.row)"
-            v-hasPermi="['member:member:close']"
-          > <span v-if="scope.row.status === '0'">禁用</span><span v-else>启用</span></el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['member:member:edit']"
-          >修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleResetPwd(scope.row)" v-hasPermi="['member:member:resetPwd']">重置密码</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleClose(scope.row)" v-hasPermi="['member:member:close']"> <span v-if="scope.row.status === '0'">禁用</span><span v-else>启用</span></el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['member:member:edit']">修改</el-button>
 
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['member:member:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['member:member:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改会员管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -182,7 +91,7 @@
           <el-input v-model="form.email" placeholder="请输入邮箱" />
         </el-form-item>
         <el-form-item label="头像">
-          <imageUpload v-model="form.avatar"/>
+          <imageUpload v-model="form.avatar" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -194,11 +103,11 @@
 </template>
 
 <script>
-import {listMember, getMember, delMember, addMember, updateMember, resetUserPwd, changeStatus} from "@/api/member/member";
+import { listMember, getMember, delMember, addMember, updateMember, resetUserPwd, changeStatus } from "@/api/member/member";
 export default {
   name: "Member",
   dicts: ['cmny_member_status'],
-  data() {
+  data () {
     return {
       // 按钮loading
       buttonLoading: false,
@@ -253,12 +162,12 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.getList();
   },
   methods: {
     /** 查询会员管理列表 */
-    getList() {
+    getList () {
       this.loading = true;
       listMember(this.queryParams).then(response => {
         this.memberList = response.rows;
@@ -267,12 +176,12 @@ export default {
       });
     },
     // 取消按钮
-    cancel() {
+    cancel () {
       this.open = false;
       this.reset();
     },
     // 表单重置
-    reset() {
+    reset () {
       this.form = {
         memberId: undefined,
         memberName: undefined,
@@ -295,29 +204,29 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
       this.resetForm("queryForm");
       this.handleQuery();
     },
     // 多选框选中数据
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.memberIds = selection.map(item => item.memberId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd () {
       this.reset();
       this.open = true;
       this.title = "添加会员管理";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate (row) {
       this.loading = true;
       this.reset();
       const memberId = row.memberId || this.memberIds
@@ -329,7 +238,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm() {
+    submitForm () {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
@@ -354,7 +263,7 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    handleDelete (row) {
       const memberIds = row.memberId || this.memberIds;
       this.$modal.confirm('是否确认删除会员管理编号为"' + memberIds + '"的数据项？').then(() => {
         this.loading = true;
@@ -369,21 +278,21 @@ export default {
     },
 
     // 状态修改
-    handleClose(row) {
+    handleClose (row) {
       let text = row.status === "0" ? "停用" : "启用";
-      this.$modal.confirm('确认要"' + text + '"吗？').then(function() {
+      this.$modal.confirm('确认要"' + text + '"吗？').then(function () {
         const status = row.status === "0" ? "1" : "0";
         return changeStatus(row.memberId, row.status);
-      }).then(() =>{
+      }).then(() => {
         this.$modal.msgSuccess(text + "成功");
         this.getList();
-      }).catch(function() {
+      }).catch(function () {
         row.status = row.status === "0" ? "0" : "1";
       });
     },
 
     /** 重置密码按钮操作 */
-    handleResetPwd(row) {
+    handleResetPwd (row) {
       this.$prompt('请输入"' + row.memberName + '"的新密码', "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -394,15 +303,15 @@ export default {
         resetUserPwd(row.memberId, value).then(response => {
           this.$modal.msgSuccess("修改成功");
         });
-      }).catch(() => {});
+      }).catch(() => { });
     },
     /** 导出按钮操作 */
-    handleExport() {
+    handleExport () {
       this.download('member/member/export', {
         ...this.queryParams
       }, `member_${new Date().getTime()}.xlsx`)
     },
-    handleAllot(row){
+    handleAllot (row) {
       this.$refs.select.show(row);
     },
   }

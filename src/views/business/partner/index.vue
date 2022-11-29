@@ -1,23 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="合伙人名称" prop="partnerName">
-        <el-input
-          v-model="queryParams.partnerName"
-          placeholder="请输入合伙人名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.partnerName" placeholder="请输入合伙人名称" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="图标路径" prop="url">
-        <el-input
-          v-model="queryParams.url"
-          placeholder="请输入图标路径"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.url" placeholder="请输入图标路径" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -27,36 +15,13 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['business:partner:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPermi="['business:partner:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['business:partner:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPermi="['business:partner:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['business:partner:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPermi="['business:partner:remove']">删除</el-button>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button
@@ -77,40 +42,20 @@
       <el-table-column label="合伙人名称" align="center" prop="partnerName" />
       <el-table-column label="图标" align="center" prop="icon">
         <template slot-scope="scope">
-          <el-image
-            style="width: 140px; height: 50px"
-            :src="scope.row.url">
+          <el-image style="width: 140px; height: 50px" :src="scope.row.url">
           </el-image>
         </template>
       </el-table-column>
       <!-- <el-table-column label="图标路径" align="center" prop="url" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['business:partner:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['business:partner:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['business:partner:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['business:partner:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改合作伙伴对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -122,7 +67,7 @@
           <el-input v-model="form.url" placeholder="请输入图标路径" />
         </el-form-item> -->
         <el-form-item label="公司图标">
-          <imageUpload v-model="form.url"/>
+          <imageUpload v-model="form.url" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -138,7 +83,7 @@ import { listPartner, getPartner, delPartner, addPartner, updatePartner } from "
 
 export default {
   name: "Partner",
-  data() {
+  data () {
     return {
       // 按钮loading
       buttonLoading: false,
@@ -183,12 +128,12 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.getList();
   },
   methods: {
     /** 查询合作伙伴列表 */
-    getList() {
+    getList () {
       this.loading = true;
       listPartner(this.queryParams).then(response => {
         this.partnerList = response.rows;
@@ -197,12 +142,12 @@ export default {
       });
     },
     // 取消按钮
-    cancel() {
+    cancel () {
       this.open = false;
       this.reset();
     },
     // 表单重置
-    reset() {
+    reset () {
       this.form = {
         partnerId: undefined,
         partnerName: undefined,
@@ -216,29 +161,29 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
       this.resetForm("queryForm");
       this.handleQuery();
     },
     // 多选框选中数据
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.ids = selection.map(item => item.partnerId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd () {
       this.reset();
       this.open = true;
       this.title = "添加合作伙伴";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate (row) {
       this.loading = true;
       this.reset();
       const partnerId = row.partnerId || this.ids
@@ -250,7 +195,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm() {
+    submitForm () {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
@@ -275,7 +220,7 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    handleDelete (row) {
       const partnerIds = row.partnerId || this.ids;
       this.$modal.confirm('是否确认删除合作伙伴编号为"' + partnerIds + '"的数据项？').then(() => {
         this.loading = true;
@@ -289,7 +234,7 @@ export default {
       });
     },
     /** 导出按钮操作 */
-    handleExport() {
+    handleExport () {
       this.download('business/partner/export', {
         ...this.queryParams
       }, `partner_${new Date().getTime()}.xlsx`)

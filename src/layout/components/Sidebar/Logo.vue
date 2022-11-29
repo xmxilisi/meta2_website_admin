@@ -1,7 +1,7 @@
 <template>
-  <div class="sidebar-logo-container" :class="{'collapse':collapse}" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }">
+  <div class="sidebar-logo-container" :class="{'collapse': collapse}" :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground, padding: !collapse ? '' : '0' }">
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
+      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link collapseIcon" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo" />
         <h1 v-else class="sidebar-title" :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">{{ title }} </h1>
       </router-link>
@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      title: 'Meta+ 官网',
+      title: 'Meta+ 社区',
       logo: logoImg
     }
   }
@@ -43,6 +43,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@font-face {
+  font-family: 'word'; /* Project id  */
+  src: url('../../../../public/simplified_characters.ttf');
+}
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
 }
@@ -52,35 +56,42 @@ export default {
   opacity: 0;
 }
 
+.collapseIcon {
+  justify-content: center;
+  position: relative;
+}
+
 .sidebar-logo-container {
   position: relative;
   width: 100%;
-  height: 50px;
-  line-height: 50px;
-  background: #2b2f3a;
-  text-align: center;
+  height: 60px;
+  line-height: 60px;
+  background: #191f31;
+  // text-align: center;
+  // text-indent: 32px;
+  padding-left: 24px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
   overflow: hidden;
 
   & .sidebar-logo-link {
     height: 100%;
     width: 100%;
+    display: flex !important;
+    align-items: center;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       vertical-align: middle;
       margin-right: 12px;
     }
 
     & .sidebar-title {
-      display: inline-block;
-      margin: 0;
-      color: #fff;
-      font-weight: 600;
-      line-height: 50px;
-      font-size: 14px;
-      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
-      vertical-align: middle;
+      font-size: 20px;
+      color: #ffffff;
+      line-height: 23px;
+      font-family: 'word' !important;
     }
   }
 

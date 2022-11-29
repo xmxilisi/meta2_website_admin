@@ -1,23 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" label-width="68px">
       <el-form-item label="登录地址" prop="ipaddr">
-        <el-input
-          v-model="queryParams.ipaddr"
-          placeholder="请输入登录地址"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.ipaddr" placeholder="请输入登录地址" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="用户名称" prop="userName">
-        <el-input
-          v-model="queryParams.userName"
-          placeholder="请输入用户名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -25,11 +13,7 @@
       </el-form-item>
 
     </el-form>
-    <el-table
-      v-loading="loading"
-      :data="list.slice((pageNum-1)*pageSize,pageNum*pageSize)"
-      style="width: 100%;"
-    >
+    <el-table v-loading="loading" :data="list.slice((pageNum-1)*pageSize,pageNum*pageSize)" style="width: 100%;">
       <el-table-column label="序号" type="index" align="center">
         <template slot-scope="scope">
           <span>{{(pageNum - 1) * pageSize + scope.$index + 1}}</span>
@@ -49,13 +33,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleForceLogout(scope.row)"
-            v-hasPermi="['monitor:online:forceLogout']"
-          >强退</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleForceLogout(scope.row)" v-hasPermi="['monitor:online:forceLogout']">强退</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -69,7 +47,7 @@ import { list, forceLogout } from "@/api/monitor/online";
 
 export default {
   name: "Online",
-  data() {
+  data () {
     return {
       // 遮罩层
       loading: true,
@@ -86,12 +64,12 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.getList();
   },
   methods: {
     /** 查询登录日志列表 */
-    getList() {
+    getList () {
       this.loading = true;
       list(this.queryParams).then(response => {
         this.list = response.rows;
@@ -100,23 +78,23 @@ export default {
       });
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
       this.resetForm("queryForm");
       this.handleQuery();
     },
     /** 强退按钮操作 */
-    handleForceLogout(row) {
-      this.$modal.confirm('是否确认强退名称为"' + row.userName + '"的数据项？').then(function() {
+    handleForceLogout (row) {
+      this.$modal.confirm('是否确认强退名称为"' + row.userName + '"的数据项？').then(function () {
         return forceLogout(row.tokenId);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("强退成功");
-      }).catch(() => {});
+      }).catch(() => { });
     }
   }
 };

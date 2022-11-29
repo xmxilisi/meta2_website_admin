@@ -1,33 +1,17 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="配置key" prop="configKey">
         <el-select v-model="queryParams.configKey" placeholder="请选择配置key" clearable size="small">
-          <el-option
-            v-for="configKey in configKeyOptions"
-            :key="configKey.configKey"
-            :label="configKey.label"
-            :value="configKey.configKey"
-          />
+          <el-option v-for="configKey in configKeyOptions" :key="configKey.configKey" :label="configKey.label" :value="configKey.configKey" />
         </el-select>
       </el-form-item>
       <el-form-item label="桶名称" prop="bucketName">
-        <el-input
-          v-model="queryParams.bucketName"
-          placeholder="请输入桶名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.bucketName" placeholder="请输入桶名称" clearable size="small" @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small">
-          <el-option
-            v-for="dict in dict.type.sys_normal_disable"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -38,43 +22,20 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:oss:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPermi="['system:oss:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:oss:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPermi="['system:oss:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:oss:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPermi="['system:oss:remove']">删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="ossConfigList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主建" align="center" prop="ossConfigId" v-if="false"/>
+      <el-table-column label="主建" align="center" prop="ossConfigId" v-if="false" />
       <el-table-column label="配置key" align="center" prop="configKey" />
       <el-table-column label="访问站点" align="center" prop="endpoint" width="200" />
       <el-table-column label="桶名称" align="center" prop="bucketName" />
@@ -82,53 +43,25 @@
       <el-table-column label="域" align="center" prop="region" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.status"
-            active-value="0"
-            inactive-value="1"
-            @change="handleStatusChange(scope.row)"
-          ></el-switch>
+          <el-switch v-model="scope.row.status" active-value="0" inactive-value="1" @change="handleStatusChange(scope.row)"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:oss:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:oss:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:oss:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:oss:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" />
 
     <!-- 添加或修改对象存储配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="配置key" prop="configKey">
           <el-select v-model="form.configKey" placeholder="请选择配置key">
-            <el-option
-              v-for="configKey in configKeyOptions"
-              :key="configKey.configKey"
-              :label="configKey.label"
-              :value="configKey.configKey"
-            />
+            <el-option v-for="configKey in configKeyOptions" :key="configKey.configKey" :label="configKey.label" :value="configKey.configKey" />
           </el-select>
         </el-form-item>
         <el-form-item label="访问站点" prop="endpoint">
@@ -151,11 +84,7 @@
         </el-form-item>
         <el-form-item label="是否HTTPS">
           <el-radio-group v-model="form.isHttps">
-            <el-radio
-              v-for="dict in dict.type.sys_yes_no"
-              :key="dict.value"
-              :label="dict.value"
-            >{{dict.label}}</el-radio>
+            <el-radio v-for="dict in dict.type.sys_yes_no" :key="dict.value" :label="dict.value">{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="域" prop="region">
@@ -187,7 +116,7 @@ import {
 export default {
   name: "OssConfig",
   dicts: ['sys_yes_no', 'sys_normal_disable'],
-  data() {
+  data () {
     return {
       // 按钮loading
       buttonLoading: false,
@@ -278,13 +207,13 @@ export default {
       },
     };
   },
-  created() {
+  created () {
     this.getList();
     this.configKeyOptions = this.configKeyDatas;
   },
   methods: {
     /** 查询对象存储配置列表 */
-    getList() {
+    getList () {
       this.loading = true;
       listOssConfig(this.queryParams).then((response) => {
         this.ossConfigList = response.rows;
@@ -293,12 +222,12 @@ export default {
       });
     },
     // 取消按钮
-    cancel() {
+    cancel () {
       this.open = false;
       this.reset();
     },
     // 表单重置
-    reset() {
+    reset () {
       this.form = {
         ossConfigId: undefined,
         configKey: undefined,
@@ -316,29 +245,29 @@ export default {
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
-    handleQuery() {
+    handleQuery () {
       this.queryParams.pageNum = 1;
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery () {
       this.resetForm("queryForm");
       this.handleQuery();
     },
     // 多选框选中数据
-    handleSelectionChange(selection) {
+    handleSelectionChange (selection) {
       this.ids = selection.map(item => item.ossConfigId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd () {
       this.reset();
       this.open = true;
       this.title = "添加对象存储配置";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    handleUpdate (row) {
       this.loading = true;
       this.reset();
       const ossConfigId = row.ossConfigId || this.ids;
@@ -350,7 +279,7 @@ export default {
       });
     },
     /** 提交按钮 */
-    submitForm() {
+    submitForm () {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.buttonLoading = true;
@@ -375,7 +304,7 @@ export default {
       });
     },
     /** 删除按钮操作 */
-    handleDelete(row) {
+    handleDelete (row) {
       const ossConfigIds = row.ossConfigId || this.ids;
       this.$modal.confirm('是否确认删除对象存储配置编号为"' + ossConfigIds + '"的数据项?').then(() => {
         this.loading = true;
@@ -389,7 +318,7 @@ export default {
       });
     },
     // 对象存储配置状态修改
-    handleStatusChange(row) {
+    handleStatusChange (row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$modal.confirm('确认要"' + text + '""' + row.configKey + '"配置吗?').then(() => {
         return changeOssConfigStatus(row.ossConfigId, row.status, row.configKey);
