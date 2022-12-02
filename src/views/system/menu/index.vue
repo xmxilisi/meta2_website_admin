@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" v-show="showSearch">
+    <el-form :model="queryParams" class="queryForm" ref="queryForm" size="small" :inline="true" v-show="showSearch">
       <el-form-item label="菜单名称" prop="menuName">
-        <el-input v-model="queryParams.menuName" placeholder="请输入菜单名称" clearable size="small" @keyup.enter.native="handleQuery" />
+        <el-input v-model="queryParams.menuName" placeholder="请输入菜单名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="菜单状态" clearable size="small">
+        <el-select v-model="queryParams.status" placeholder="菜单状态" clearable>
           <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
@@ -55,11 +55,11 @@
     </el-table>
 
     <!-- 添加或修改菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="680px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24">
-            <el-form-item label="上级菜单">
+            <el-form-item label="上级菜单" prop="parentId">
               <treeselect v-model="form.parentId" :options="menuOptions" :normalizer="normalizer" :show-count="true" placeholder="选择上级菜单" />
             </el-form-item>
           </el-col>
@@ -73,7 +73,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24" v-if="form.menuType != 'F'">
-            <el-form-item label="菜单图标">
+            <el-form-item label="菜单图标" prop="icon">
               <el-popover placement="bottom-start" width="460" trigger="click" @show="$refs['iconSelect'].reset()">
                 <IconSelect ref="iconSelect" @selected="selected" />
                 <el-input slot="reference" v-model="form.icon" placeholder="点击选择图标" readonly>
@@ -94,7 +94,7 @@
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType != 'F'">
-            <el-form-item>
+            <el-form-item prop="isFrame">
               <span slot="label">
                 <el-tooltip content="选择是外链则路由地址需要以`http(s)://`开头" placement="top">
                   <i class="el-icon-question"></i>
@@ -130,10 +130,10 @@
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType != 'M'">
-            <el-form-item>
+            <el-form-item prop="perms">
               <el-input v-model="form.perms" placeholder="请输入权限标识" maxlength="100" />
               <span slot="label">
-                <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasPermi('system:user:list')`)" placement="top">
+                <el-tooltip content="控制器中定义的权限字符，如：@SaCheckPermission('system:user:list')" placement="top">
                   <i class="el-icon-question"></i>
                 </el-tooltip>
                 权限字符
@@ -141,8 +141,8 @@
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType == 'C'">
-            <el-form-item>
-              <el-input v-model="form.query" placeholder="请输入路由参数" maxlength="255" />
+            <el-form-item prop="queryParam">
+              <el-input v-model="form.queryParam" placeholder="请输入路由参数" maxlength="255" />
               <span slot="label">
                 <el-tooltip content='访问路由的默认传递参数，如：`{"id": 1, "name": "ry"}`' placement="top">
                   <i class="el-icon-question"></i>
@@ -152,7 +152,7 @@
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType == 'C'">
-            <el-form-item>
+            <el-form-item prop="isCache">
               <span slot="label">
                 <el-tooltip content="选择是则会被`keep-alive`缓存，需要匹配组件的`name`和地址保持一致" placement="top">
                   <i class="el-icon-question"></i>
@@ -166,7 +166,7 @@
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType != 'F'">
-            <el-form-item>
+            <el-form-item prop="visible">
               <span slot="label">
                 <el-tooltip content="选择隐藏则路由将不会出现在侧边栏，但仍然可以访问" placement="top">
                   <i class="el-icon-question"></i>
@@ -179,7 +179,7 @@
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType != 'F'">
-            <el-form-item>
+            <el-form-item prop="status">
               <span slot="label">
                 <el-tooltip content="选择停用则路由将不会出现在侧边栏，也不能被访问" placement="top">
                   <i class="el-icon-question"></i>

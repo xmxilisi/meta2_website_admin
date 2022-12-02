@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      title: 'Meta+ 社区',
+      title: 'Meta+ 官网',
       logo: logoImg
     }
   }

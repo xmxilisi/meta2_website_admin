@@ -7,25 +7,25 @@
           <el-input v-model="deptName" placeholder="请输入部门名称" clearable size="small" prefix-icon="el-icon-search" style="margin-bottom: 20px" />
         </div>
         <div class="head-container">
-          <el-tree :data="deptOptions" :props="defaultProps" :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree" default-expand-all @node-click="handleNodeClick" />
+          <el-tree :data="deptOptions" :props="defaultProps" :expand-on-click-node="false" :filter-node-method="filterNode" ref="tree" default-expand-all highlight-current @node-click="handleNodeClick" />
         </div>
       </el-col>
       <!--用户数据-->
       <el-col :span="20" :xs="24">
-        <el-form :model="queryParams" ref="queryForm" class="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
           <el-form-item label="用户名称" prop="userName">
-            <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
+            <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
           </el-form-item>
           <el-form-item label="手机号码" prop="phonenumber">
-            <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable size="small" style="width: 240px" @keyup.enter.native="handleQuery" />
+            <el-input v-model="queryParams.phonenumber" placeholder="请输入手机号码" clearable style="width: 240px" @keyup.enter.native="handleQuery" />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select v-model="queryParams.status" placeholder="用户状态" clearable size="small" style="width: 240px">
+            <el-select v-model="queryParams.status" placeholder="用户状态" clearable style="width: 240px">
               <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label" :value="dict.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="创建时间">
-            <el-date-picker v-model="dateRange" size="small" style="width: 240px" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="dateRange" style="width: 240px" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -91,83 +91,49 @@
     </el-row>
 
     <!-- 添加或修改用户配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="用户昵称" prop="nickName">
-              <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="归属部门" prop="deptId">
-              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="手机号码" prop="phonenumber">
-              <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
-              <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="用户性别">
-              <el-select v-model="form.sex" placeholder="请选择">
-                <el-option v-for="dict in dict.type.sys_user_sex" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="状态">
-              <el-radio-group v-model="form.status">
-                <el-radio v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.value">{{dict.label}}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="岗位">
-              <el-select v-model="form.postIds" multiple placeholder="请选择">
-                <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="角色">
-              <el-select v-model="form.roleIds" multiple placeholder="请选择">
-                <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId" :disabled="item.status == 1"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="备注">
-              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item label="用户昵称" prop="nickName">
+          <el-input v-model="form.nickName" placeholder="请输入用户昵称" maxlength="30" />
+        </el-form-item>
+        <el-form-item label="归属部门" prop="deptId">
+          <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phonenumber">
+          <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+        </el-form-item>
+        <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
+          <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
+        </el-form-item>
+        <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
+          <el-input v-model="form.password" placeholder="请输入用户密码" type="password" maxlength="20" show-password />
+        </el-form-item>
+        <el-form-item label="用户性别">
+          <el-select v-model="form.sex" placeholder="请选择性别">
+            <el-option v-for="dict in dict.type.sys_user_sex" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
+            <el-radio v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.value">{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="岗位">
+          <el-select v-model="form.postIds" multiple placeholder="请选择岗位">
+            <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="form.roleIds" multiple placeholder="请选择角色">
+            <el-option v-for="item in roleOptions" :key="item.roleId" :label="item.roleName" :value="item.roleId" :disabled="item.status == 1"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -197,9 +163,8 @@
 </template>
 
 <script>
-import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus } from "@/api/system/user";
+import { listUser, getUser, delUser, addUser, updateUser, resetUserPwd, changeUserStatus, deptTreeSelect } from "@/api/system/user";
 import { getToken } from "@/utils/auth";
-import { treeselect } from "@/api/system/dept";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -295,7 +260,7 @@ export default {
         email: [
           {
             type: "email",
-            message: "'请输入正确的邮箱地址",
+            message: "请输入正确的邮箱地址",
             trigger: ["blur", "change"]
           }
         ],
@@ -317,7 +282,7 @@ export default {
   },
   created () {
     this.getList();
-    this.getTreeselect();
+    this.getDeptTree();
     this.getConfigKey("sys.user.initPassword").then(response => {
       this.initPassword = response.msg;
     });
@@ -334,9 +299,8 @@ export default {
       );
     },
     /** 查询部门下拉树结构 */
-    getTreeselect () {
-      treeselect().then(response => {
-        console.log(response.data);
+    getDeptTree () {
+      deptTreeSelect().then(response => {
         this.deptOptions = response.data;
       });
     },
@@ -347,9 +311,8 @@ export default {
     },
     // 节点单击事件
     handleNodeClick (data) {
-      console.log(data.id);
       this.queryParams.deptId = data.id;
-      this.getList();
+      this.handleQuery();
     },
     // 用户状态修改
     handleStatusChange (row) {
@@ -418,7 +381,6 @@ export default {
     /** 新增按钮操作 */
     handleAdd () {
       this.reset();
-      this.getTreeselect();
       getUser().then(response => {
         this.postOptions = response.data.posts;
         this.roleOptions = response.data.roles;
@@ -430,14 +392,13 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset();
-      this.getTreeselect();
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {
         this.form = response.data.user;
         this.postOptions = response.data.posts;
         this.roleOptions = response.data.roles;
-        this.form.postIds = response.data.postIds;
-        this.form.roleIds = response.data.roleIds;
+        this.$set(this.form, "postIds", response.data.postIds);
+        this.$set(this.form, "roleIds", response.data.roleIds);
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";
@@ -450,7 +411,7 @@ export default {
         cancelButtonText: "取消",
         closeOnClickModal: false,
         inputPattern: /^.{5,20}$/,
-        inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
+        inputErrorMessage: "用户密码长度必须介于 5 和 20 之间"
       }).then(({ value }) => {
         resetUserPwd(row.userId, value).then(response => {
           this.$modal.msgSuccess("修改成功，新密码是：" + value);
@@ -517,7 +478,7 @@ export default {
       this.upload.open = false;
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
-      this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });
+      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true });
       this.getList();
     },
     // 提交上传文件
@@ -527,3 +488,14 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+/deep/ .el-dialog {
+  .el-row {
+    .el-col + .el-col {
+      margin-top: 30px;
+    }
+  }
+}
+</style>
+
