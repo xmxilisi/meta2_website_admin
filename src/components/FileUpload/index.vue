@@ -1,18 +1,6 @@
 <template>
   <div class="upload-file">
-    <el-upload
-      :action="uploadFileUrl"
-      :before-upload="handleBeforeUpload"
-      :file-list="fileList"
-      :limit="limit"
-      :on-error="handleUploadError"
-      :on-exceed="handleExceed"
-      :on-success="handleUploadSuccess"
-      :show-file-list="false"
-      :headers="headers"
-      class="upload-file-uploader"
-      ref="upload"
-    >
+    <el-upload :action="uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList" :limit="limit" :on-error="handleUploadError" :on-exceed="handleExceed" :on-success="handleUploadSuccess" :show-file-list="false" :headers="headers" class="upload-file-uploader" ref="upload">
       <!-- 上传按钮 -->
       <el-button size="mini" type="primary">选取文件</el-button>
       <!-- 上传提示 -->
@@ -55,13 +43,13 @@ export default {
     fileSize: {
       type: Number,
       // default: 5,
-      default: 50,
+      default: 1024,
     },
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
       // default: () => ["doc", "xls", "ppt", "txt", "pdf"],
-      default: () => ["doc", "xls", "ppt", "txt", "pdf", "mp4","png", "jpg", "jpeg"],
+      default: () => ["doc", "xls", "ppt", "txt", "pdf", "mp4", "png", "jpg", "jpeg", "apk"],
     },
     // 是否显示提示
     isShowTip: {
@@ -69,7 +57,7 @@ export default {
       default: true
     }
   },
-  data() {
+  data () {
     return {
       baseUrl: process.env.VUE_APP_BASE_API,
       uploadFileUrl: process.env.VUE_APP_BASE_API + "/system/oss/upload", // 上传的图片服务器地址
@@ -81,7 +69,7 @@ export default {
   },
   watch: {
     value: {
-      handler(val) {
+      handler (val) {
         if (val) {
           let temp = 1;
           // 首先将值转为数组
@@ -105,13 +93,13 @@ export default {
   },
   computed: {
     // 是否显示提示
-    showTip() {
+    showTip () {
       return this.isShowTip && (this.fileType || this.fileSize);
     },
   },
   methods: {
     // 上传前校检格式和大小
-    handleBeforeUpload(file) {
+    handleBeforeUpload (file) {
       // 校检文件类型
       if (this.fileType) {
         let fileExtension = "";
@@ -139,15 +127,15 @@ export default {
       return true;
     },
     // 文件个数超出
-    handleExceed() {
+    handleExceed () {
       this.$message.error(`上传文件数量不能超过 ${this.limit} 个!`);
     },
     // 上传失败
-    handleUploadError(err) {
+    handleUploadError (err) {
       this.$message.error("上传失败, 请重试");
     },
     // 上传成功回调
-    handleUploadSuccess(res, file) {
+    handleUploadSuccess (res, file) {
       if (res.code === 200) {
         this.$message.success("上传成功");
         this.fileList.push({ name: res.data.fileName, url: res.data.url });
@@ -158,12 +146,12 @@ export default {
       }
     },
     // 删除文件
-    handleDelete(index) {
+    handleDelete (index) {
       this.fileList.splice(index, 1);
       this.$emit("input", this.listToString(this.fileList));
     },
     // 获取文件名称
-    getFileName(name) {
+    getFileName (name) {
       if (name.lastIndexOf("/") > -1) {
         return name.slice(name.lastIndexOf("/") + 1).toLowerCase();
       } else {
@@ -171,7 +159,7 @@ export default {
       }
     },
     // 对象转成指定字符串分隔
-    listToString(list, separator) {
+    listToString (list, separator) {
       let strs = "";
       separator = separator || ",";
       for (let i in list) {
