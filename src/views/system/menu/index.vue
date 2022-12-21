@@ -141,8 +141,8 @@
             </el-form-item>
           </el-col>
           <el-col v-if="form.menuType == 'C'">
-            <el-form-item prop="queryParam">
-              <el-input v-model="form.queryParam" placeholder="请输入路由参数" maxlength="255" />
+            <el-form-item prop="query">
+              <el-input v-model="form.query" placeholder="请输入路由参数" maxlength="255" />
               <span slot="label">
                 <el-tooltip content='访问路由的默认传递参数，如：`{"id": 1, "name": "ry"}`' placement="top">
                   <i class="el-icon-question"></i>
