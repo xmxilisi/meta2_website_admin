@@ -49,7 +49,7 @@
           v-hasPermi="['business:companyInfo:remove']"
         >删除</el-button>
       </el-col>
-     
+
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -60,6 +60,7 @@
       <el-table-column label="公司介绍" align="center" prop="introduction" />
       <el-table-column label="视频地址" align="center" prop="videoUrl" />
       <el-table-column label="公司logo" align="center" prop="logo" />
+      <el-table-column label="公司地址" align="center" prop="address" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -102,6 +103,9 @@
         </el-form-item>
         <el-form-item label="公司logo">
           <imageUpload v-model="form.logo"/>
+        </el-form-item>
+        <el-form-item label="公司地址">
+          <el-input v-model="form.address" placeholder="请输入公司地址" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
