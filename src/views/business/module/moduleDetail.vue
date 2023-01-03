@@ -31,10 +31,12 @@
       <el-table-column label="详情标题英文" align="center" prop="titleEn" />
       <el-table-column label="内容" align="center" prop="contentCn" show-overflow-tooltip />
       <el-table-column label="内容英文" align="center" prop="contentEn" show-overflow-tooltip />
-      <el-table-column label="图片" align="center" prop="img">
+      <el-table-column label="图片&视频" align="center" prop="img" width="200">
         <template slot-scope="scope" v-if="scope.row.img">
-          <el-image style="max-width: 50px; max-height: 50px" :src="scope.row.img">
-          </el-image>
+          <video :src="scope.row.img" controls="controls" style="width: 200px" v-if="scope.row.type == 1">
+            您的浏览器不支持视频播放
+          </video>
+          <image-preview :src="scope.row.img" fit="contain" width="100%" height="100%" v-else />
         </template>
       </el-table-column>
       <el-table-column label="小图标" align="center" prop="icon">
@@ -75,9 +77,26 @@
         <el-form-item label="内容英文" prop="contentEn">
           <el-input v-model="form.contentEn" type="textarea" placeholder="请输入内容英文" autosize resize="none" />
         </el-form-item>
-        <el-form-item label="图片">
-          <imageUpload v-model="form.img" />
+
+        <el-form-item label="类型：0图片，1视频" prop="type">
+          <el-radio-group v-model="form.type">
+            <el-radio label="0">图片</el-radio>
+            <el-radio label="1">视频</el-radio>
+          </el-radio-group>
+          <div>(目前只有老挝元宇宙可以设置)</div>
         </el-form-item>
+        <template v-if="form.type == 0">
+          <el-form-item label="图片">
+            <imageUpload v-model="form.img" />
+          </el-form-item>
+        </template>
+        {{form.img}}
+        <template v-if="form.type == 1">
+          <el-form-item label="视频">
+            <fileUpload v-model="form.img" :limit="1" :fileType="['mp4']" />
+          </el-form-item>
+        </template>
+
         <el-form-item label="小图标">
           <imageUpload v-model="form.icon" />
         </el-form-item>
@@ -185,7 +204,8 @@ export default {
         createBy: undefined,
         createTime: undefined,
         updateBy: undefined,
-        updateTime: undefined
+        updateTime: undefined,
+        type: '0'
       };
       this.resetForm("form");
     },
