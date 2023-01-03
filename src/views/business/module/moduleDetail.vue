@@ -90,9 +90,11 @@
             <imageUpload v-model="form.img" />
           </el-form-item>
         </template>
-        {{form.img}}
         <template v-if="form.type == 1">
           <el-form-item label="视频">
+            <video :src="form.img" controls="controls" style="width: 200px" v-if="form.img">
+              您的浏览器不支持视频播放
+            </video>
             <fileUpload v-model="form.img" :limit="1" :fileType="['mp4']" />
           </el-form-item>
         </template>
