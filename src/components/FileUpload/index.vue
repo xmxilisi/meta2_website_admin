@@ -1,6 +1,6 @@
 <template>
   <div class="upload-file">
-    <el-upload :action="uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList" :limit="limit" :on-error="handleUploadError" :on-exceed="handleExceed" :on-success="handleUploadSuccess" :show-file-list="false" :headers="headers" class="upload-file-uploader" ref="upload">
+    <el-upload :action="uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList" :limit="limit" :on-error="handleUploadError" :on-progress="uploadVideoProcess" :on-exceed="handleExceed" :on-success="handleUploadSuccess" :show-file-list="false" :headers="headers" class="upload-file-uploader" ref="upload">
       <!-- 上传按钮 -->
       <el-button size="mini" type="primary">选取文件</el-button>
       <!-- 上传提示 -->
@@ -11,6 +11,8 @@
         的文件
       </div>
     </el-upload>
+
+    <el-progress :percentage="videoUploadPercent" v-if="videoFlag"></el-progress>
 
     <!-- 文件列表 -->
     <transition-group class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
@@ -65,6 +67,8 @@ export default {
         Authorization: "Bearer " + getToken(),
       },
       fileList: [],
+      videoFlag: false,  // 进度条相关的
+      videoUploadPercent: 0  // 进度条相关的
     };
   },
   watch: {
@@ -98,6 +102,11 @@ export default {
     },
   },
   methods: {
+    //进度条
+    uploadVideoProcess (event, file, fileList) {
+      this.videoFlag = true;
+      this.videoUploadPercent = parseInt(file.percentage);
+    },
     // 上传前校检格式和大小
     handleBeforeUpload (file) {
       // 校检文件类型
@@ -144,6 +153,7 @@ export default {
         this.$message.error(res.msg);
         this.loading.close();
       }
+      this.videoFlag = false
     },
     // 删除文件
     handleDelete (index) {
